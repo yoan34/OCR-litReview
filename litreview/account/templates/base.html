@@ -25,7 +25,6 @@
             {% endif %}
             <div class="user">
                 {% if request.user.is_authenticated %}
-                    <!-- <a href="{% url "logout" %}">Se déconnecter</a> -->
                     {% if request.user.profile.photo == '' %}
                         <div class="user__logo logo__red" onClick="showProfile(event)">
                             {{ request.user.username|make_list|slice:'1'|join:''|capfirst }}
@@ -54,13 +53,14 @@
                 <ul class="messages">
                     {% for message in messages %}
                         <li class="{{ message.tags }}">
-                            {{ message|safe }}
-                            <a href="{% url "ticket:subscriptions" %}" class="close">x</a>
+                            {{ message|safe }} 
+                            <a href="{{ request.path }}" class="close">x</a>
                         </li>
                     {% endfor %}
                 </ul>
             {% endif %}
             {% block content %}
+
             {% endblock %}
         </div>
         <script src="{% static "js/account.js" %}"></script>
