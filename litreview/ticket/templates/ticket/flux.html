@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Flux{% endblock %}
+
+{% block content %}  
+    <div class="flux">
+        {% if section == 'flux' %}
+        <div class="flux__contain__btn">
+            <div class="flux__btn"><a href="{% url "ticket:create_ticket" %}">Demander une critique</a></div>
+            <div class="flux__btn"><a href="{% url "ticket:create_ticket_review" %}">Créer une critique</a></div>
+        </div>
+        {% endif %}
+        {% for post in posts %}
+            {% if post.content_type == 'TICKET' %}
+                <div class="flux__post flux__ticket">
+                    <div class="flux__post__user">
+                        <div>
+                            {% if post.user == request.user %}Vous avez{% else %}
+                            {{ post.user }} a{% endif %} demandé une critique
+                        </div>
+                        <div class="flux__post__date">{{ post.time_created|date:'d-m-Y à H:i' }}</div>
+                    </div>
+                    <div class="flux__ticket__container__all">
+                        <div class="flux__ticket__title">{{ post.title }}</div>
+                        <div class="flux__ticket__container">
+                            <p class="flux__ticket__body">{{ post.description }}</p>
+
+                            {% if post.image != '' %}
+                                <img
+                                    class="flux__ticket__img{% if post.image.width > post.image.height %}--width{% else %}--height{% endif %}"
+                                    src="{{ post.image.url }}"alt="image_ticket"
+                                />
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if section == 'flux' %}
+                        {% if not post.user_has_review %}
+                            <div class="flux__btn on__review"><a href="{{ post.get_absolute_url }}">Créer une critique</a></div>
+                        {% endif %}
+                    {% else %}
+                    <div class="post__container__btn">
+                        <div class="post__btn"><a href="{% url "ticket:edit_ticket" post.id %}">Modifier le ticket</a></div>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ post.id }}">
+                            <input type="hidden" name="content_type" value="ticket">
+                            <input class="post__btn__submit" type="submit" value="Supprimer">
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="flux__post flux__review">
+                    <div class="flux__post__user">
+                        <div>
+                            {% if post.user == request.user %}Vous avez{% else %}
+                            {{ post.user }} a{% endif %} publié une critique
+                        </div>
+                        <div class="flux__post__date">{{ post.time_created|date:'d-m-Y à H:i' }}</div>
+                    </div>
+                    <div class="flux__review__title">
+                        <div class="flux__review__title__text">{{ post.headline }} -</div> 
+                        <div class="flux__review__star">
+                            {% for i in '12345'|make_list %}
+                                <img
+                                    class="flux__review__star__img"
+                                    src="{% if forloop.counter > post.rating %}../../../media/no_star.png{% else %}../../../media/star.png{% endif %}" />
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="flux__review__container__ticket">
+                        <p class="flux__review__body">{{ post.body }}</p>
+                    <div class="{% if section == 'flux' %}flux__review__ticket{% else %}post__review__ticket{% endif %}">
+                        <div>
+                            <p>Ticket - {{ post.ticket.user.username }}</p>
+                            <p>{{ post.ticket.title }}</p>
+                        </div>
+                        {% if post.ticket.image != '' %}
+                            <img
+                                class="flux__ticket__img__small{% if post.ticket.image.width > post.ticket.image.height %}--width{% else %}--height{% endif %}"
+                                src="{{ post.ticket.image.url }}"alt="image_ticket" />
+                        {% endif %}
+                    </div>
+                    </div>
+                    
+                    {% if section == 'posts' %}
+                        <div class="post__container__btn">
+                            <div class="post__btn"><a href="{% url "ticket:edit_review" post.id %}">Modifier la critique</a></div>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ post.id }}">
+                                <input type="hidden" name="content_type" value="review">
+                                <input class="post__btn__submit" type="submit" value="Supprimer">
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>Aucun post n'est visible pour le moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

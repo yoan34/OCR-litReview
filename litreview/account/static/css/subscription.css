@@ -1,0 +1,56 @@
+.sub__form {
+    flex-direction: row;
+}
+
+.sub__form__submit {
+    margin: 20px 2px 0 20px;
+    background:#12c064;
+    color:#fff;
+    text-align: center;
+    font-size:14px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px rgb(16, 83, 49);
+}
+
+.sub__title {
+    margin-top: 50px;
+    border-bottom:1px solid #bbb;
+}
+.sub__user_followed__container {
+    display: flex;
+    flex-direction: row;
+}
+
+.sub__user_followed {
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    margin: 5px 0;
+    background-color: #b6e9ce;
+    border-radius: 4px;
+}
+
+.sub__user_followed__username {
+    padding: 0;
+    margin: 0 10px;
+    line-height: 48px;
+}
+
+.sub__form__unsub {
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.sub__user__unsub {
+    height: 48px;
+    margin-bottom: 0;
+    margin-left: 1rem;
+    margin-right: 2px;
+    background:#12c064;
+    color:#fff;
+    text-align: center;
+    font-size:14px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px rgb(16, 83, 49);
+}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+    <h1>Connexion</h1>
+    {% if form.errors %}
+        <p>
+            Votre pseudo ou mot passe est incorrect.
+            Essayez à nouveau.
+        </p>
+    {% else %}
+        <p>Utiliser ce formulaire pour vous connecter. Si vous n'avez pas de compte,
+            <a href="{% url "register" %}">enregistrez-vous ici</a>.</p>
+    {% endif %}
+        <div class="login-form">
+            <form action="{% url 'login' %}" method="post">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <p><input type="submit" value="Se connecter"></p>
+            </form>
+            <p><a href="{% url "password_reset" %}">Mot de passe oublié?</a></p>
+        </div>
+{% endblock %}

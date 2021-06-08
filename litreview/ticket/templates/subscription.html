@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Abonnements{% endblock %}
+
+{% block content %}  
+    <h2>Suivre d'autres utilisateurs</h2>
+    <form class="sub__form" method="post">
+        {{ search_form.as_p }}
+        {% csrf_token %}
+        <input class="sub__form__submit" type="submit" value="Envoyer">
+    </form>
+    <h2 class="sub__title">Abonnements</h2>
+    <div>
+        {% for user_followed in users_followed %}
+        <div class="sub__user_followed__container">
+            <div class="sub__user_followed">
+                    {% if user_followed.profile.photo != '' %}
+                        <img src="{{ user_followed.profile.photo.url }}" class="user__logo__img" />
+                    {% else %}
+                        <div class="user__logo logo__red" onClick="showProfile(event)">
+                            {{ user_followed.username|make_list|slice:'1'|join:''|capfirst }}
+                        </div>
+                    {% endif %}
+                    <p class="sub__user_followed__username">{{ user_followed.username }}</p>
+                </div>
+                <form class="sub__form__unsub" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="unsubscription" value="unsubscription" />
+                    <input type="hidden" name="username" value="{{ user_followed.username }}" />
+                    <input type="submit" value="Désabonner" class="sub__user__unsub" />
+                </form>
+        </div>
+        {% empty %}
+            <p>Vous ne suivez aucun utilisateur pour le moment.</p>
+        {% endfor %}
+    </div>
+    <h2 class="sub__title">Abonnés</h2>
+    {% for follower in followers %}
+        <div class="sub__user_followed__container">
+            <div class="sub__user_followed">
+                    {% if follower.profile.photo != '' %}
+                        <img src="{{ follower.profile.photo.url }}" class="user__logo__img" />
+                    {% else %}
+                        <div class="user__logo logo__red" onClick="showProfile(event)">
+                            {{ follower.username|make_list|slice:'1'|join:''|capfirst }}
+                        </div>
+                    {% endif %}
+                    <p class="sub__user_followed__username">{{ follower.username }}</p>
+                </div>
+        </div>
+        {% empty %}
+            <p>Vous n'avez aucun abonné pour le moment.</p>
+        {% endfor %}
+{% endblock %}

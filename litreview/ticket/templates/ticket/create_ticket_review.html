@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Flux{% endblock %}
+
+{% block content %}  
+    <h2>Créer un ticket avec une critique</h2>
+{% if sent %}
+    <p>
+        Votre ticket suivit de votre critique a été correctement envoyé. Vous pouvez les retrouver sur
+        votre fil d'actualité ou dans les posts.
+    </p>
+{% else %}
+            <form class="create__ticket__review__form" method="post" enctype="multipart/form-data">
+                <div class="flux__create_review__form">
+                    {{ ticket_form.as_p }}
+                </div>
+                <div class="flux__create_review__form">
+                    {{ review_form.as_p }}
+                    {% csrf_token %}
+                    <p><input type="submit" value="Envoyer" ></p>
+                </div>
+            </form>
+    
+{% endif %}
+
+
+{% endblock %}

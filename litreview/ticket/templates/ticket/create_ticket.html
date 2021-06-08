@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Flux{% endblock %}
+
+{% block content %}  
+    <h2>Créer un ticket</h2>
+{% if sent %}
+    <p>
+        Votre ticket a été correctement envoyé. Vous pouvez le retrouver sur
+        votre fil d'actualité ou dans posts.
+    </p>
+{% else %}
+<div class="flux__create_review">
+    <form class="flux__create__ticket__form" method="post" enctype="multipart/form-data">
+        {{ ticket_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Envoyer"></p>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}

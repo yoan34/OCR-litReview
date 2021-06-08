@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Flux{% endblock %}
+
+{% block content %}  
+    <h2>Modifier ma critique</h2>
+    {% if sent %}
+        <p>
+            Votre critique a été correctement modifié. Vous pouvez la retrouver sur
+            votre fil d'actualité ou dans les posts.
+        </p>
+    {% else %}
+        <form class="create__ticket__review__form" method="post" enctype="multipart/form-data">
+            <div class="edit__review">
+                <div class="edit__review__container">
+
+                    <h3>Ticket à modifié</h3>
+                    <div class="post__review__ticket">
+                    <div>
+                        <p>crée par {{ ticket.user.username }} le {{ ticket.time_created|date:'d-m-Y à H:i' }}</p>
+                        <p>{{ ticket.title }}</p>
+                    </div>
+                    {% if ticket.image != '' %}
+                        <img
+                            class="flux__ticket__img__small{% if ticket.image.width > ticket.image.height %}--width{% else %}--height{% endif %}"
+                            src="{{ ticket.image.url }}"alt="image_ticket" />
+                    {% endif %}
+                </div>
+                </div>
+                
+                <div class="flux__create_review__form">
+                    {{ review_form.as_p }}
+                    {% csrf_token %}
+                    <p><input type="submit" value="Envoyer" ></p>
+                </div>
+            </div>
+            
+        </form>
+    {% endif %}
+{% endblock %}
