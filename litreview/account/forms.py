@@ -2,9 +2,10 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
 
+
 class LoginForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur")
-    password = forms.CharField(label="Mot de passe" ,widget=forms.PasswordInput)
+    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
 
     class Meta:
         labels = {
@@ -12,12 +13,10 @@ class LoginForm(forms.Form):
             'password': 'mot de passe',
         }
 
+
 class UserRegistrationForm(forms.ModelForm):
-    
-    password = forms.CharField(label='Mot de passe',
-    widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Répété le mot de passe',
-    widget=forms.PasswordInput)
+    password = forms.CharField(label='Mot de passe', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Répété le mot de passe', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -29,7 +28,6 @@ class UserRegistrationForm(forms.ModelForm):
         help_texts = {
             'username': None,
         }
-        
 
     def clean_password2(self):
         cd = self.cleaned_data

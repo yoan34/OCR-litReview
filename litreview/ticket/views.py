@@ -11,6 +11,7 @@ from .models import Review, UserFollows, Ticket
 
 from .tools import get_users_viewable_posts, get_users_posts
 
+
 @login_required
 def posts(request):
     tickets, reviews = get_users_posts(request.user)
@@ -20,10 +21,11 @@ def posts(request):
             Ticket.objects.get(id=request.POST.get('id')).delete()
         else:
             Review.objects.get(id=request.POST.get('id')).delete()
-        
+
     posts = sorted(itertools.chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
     return render(request, 'ticket/flux.html', {'section': 'posts',
                                                 'posts': posts})
+
 
 @login_required
 def subscriptions(request):
@@ -52,19 +54,22 @@ def subscriptions(request):
                 if user.exists():
                     relation = UserFollows.objects.filter(user=request.user, followed_user=user[0])
                     if relation.exists():
-                        messages.error(request, f"{user.values_list('username', flat=True)[0]} est déjà dans votre liste d'amis.")
+                        messages.error(request, f"{user.values_list('username', flat=True)[0]} est \
+                            déjà dans votre liste d'amis.")
                     else:
                         relation = UserFollows(user=request.user, followed_user=user[0])
                         relation.save()
-                        messages.success(request, f"{user.values_list('username', flat=True)[0]} à été ajouté avec succès.")
+                        messages.success(request, f"{user.values_list('username', flat=True)[0]} à \
+                            été ajouté avec succès.")
                 else:
-                    messages.error(request, "Ce nom d'utilisateur n'existe pas.")    
+                    messages.error(request, "Ce nom d'utilisateur n'existe pas.")
     else:
         search_form = UserFollowsForm()
     return render(request, 'subscription.html', {'section': 'subscription',
                                                  'search_form': search_form,
                                                  'users_followed': users_followed,
                                                  'followers': followers})
+
 
 @login_required
 def flux(request):
@@ -74,6 +79,7 @@ def flux(request):
 
     return render(request, 'ticket/flux.html', {'section': 'flux',
                                                 'posts': posts})
+
 
 @login_required
 def create_ticket(request):
@@ -89,8 +95,9 @@ def create_ticket(request):
     else:
         ticket_form = TicketForm()
     return render(request, 'ticket/create_ticket.html', {'section': 'flux',
-                                                      'ticket_form': ticket_form,
-                                                      'sent': sent})
+                                                         'ticket_form': ticket_form,
+                                                         'sent': sent})
+
 
 @login_required
 def create_ticket_review(request):
@@ -117,6 +124,7 @@ def create_ticket_review(request):
                                                                 'review_form': review_form,
                                                                 'sent': sent})
 
+
 @login_required
 def create_review(request, id):
     ticket = Ticket.objects.filter(id=id)[0]
@@ -134,16 +142,17 @@ def create_review(request, id):
     else:
         review_form = ReviewForm()
 
-
     return render(request, 'ticket/create_review.html', {'section': 'flux',
                                                          'ticket': ticket,
                                                          'sent': sent,
                                                          'review_form': review_form})
 
+
+@login_required
 def edit_ticket(request, id):
     sent = False
     ticket = get_object_or_404(Ticket, id=id)
-    if request.method =='POST':
+    if request.method == 'POST':
         ticket_form = TicketForm(request.POST, instance=ticket, files=request.FILES)
         if ticket_form.is_valid():
             ticket_form.save()
@@ -154,6 +163,8 @@ def edit_ticket(request, id):
                                                        'ticket_form': ticket_form,
                                                        'sent': sent})
 
+
+@login_required
 def edit_review(request, id):
     sent = False
     review = get_object_or_404(Review, id=id)

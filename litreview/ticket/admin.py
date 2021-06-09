@@ -11,6 +11,7 @@ class TicketAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['ticket', 'rating', 'user', 'headline', 'time_created']
 
+
 @admin.register(UserFollows)
 class UserFollowsAdmin(admin.ModelAdmin):
     list_display = ['user', 'followed_user']

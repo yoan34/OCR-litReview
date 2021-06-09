@@ -13,10 +13,11 @@ def get_users_viewable_posts(user):
     reviews = Review.objects.filter(Q(ticket__in=tickets) | Q(user=user))
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
-    
+
     user_review = Review.objects.filter(user=user, ticket=OuterRef('pk'))
     tickets = tickets.annotate(user_has_review=Exists(user_review))
     return tickets, reviews
+
 
 def get_users_posts(user):
     tickets = Ticket.objects.filter(user=user)

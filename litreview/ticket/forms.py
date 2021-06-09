@@ -1,6 +1,6 @@
 from django import forms
-from django.forms import widgets
 from ticket.models import Review, Ticket
+
 
 class UserFollowsForm(forms.Form):
     username = forms.CharField()
@@ -32,6 +32,7 @@ class ReviewForm(forms.ModelForm):
             'headline': 'Titre',
             'body': 'description',
         }
+
 
 class TicketForm(forms.ModelForm):
     class Meta:
